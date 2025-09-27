@@ -1,0 +1,9 @@
+{
+	"name": "df-ucb-sisinfo-941298",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "6289a8b4-40fa-475a-94a5-6f1a45d724cd",
+		"tenantId": "cc28633f-12b8-46cb-bc15-951dae239b4d"
+	}
+}
