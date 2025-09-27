@@ -12,10 +12,21 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_hechos_ventas",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "cast1"
 				}
 			],
 			"scriptLines": [
@@ -33,7 +44,46 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 derive(PrecioUnitario = replace(PrecioUnitario, \",\", \".\")) ~> derivedColumn1"
+				"source1 derive(PrecioUnitario = replace(PrecioUnitario, \",\", \".\"),",
+				"          Total = replace(Total,\",\",\".\")) ~> derivedColumn1",
+				"derivedColumn1 cast(output(",
+				"          PrecioUnitario as decimal(10,2),",
+				"          Total as decimal(10,2)",
+				"     ),",
+				"     errors: true) ~> cast1",
+				"cast1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id_venta as integer,",
+				"          noFactura as integer,",
+				"          cantidad as integer,",
+				"          precioUnitario as decimal(9,2),",
+				"          total as decimal(9,2),",
+				"          fecha as date,",
+				"          codInventario as string,",
+				"          descripcion as string,",
+				"          pais as string,",
+				"          idCliente as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          noFactura = NoFactura,",
+				"          cantidad = Cantidad,",
+				"          precioUnitario = PrecioUnitario,",
+				"          total = Total,",
+				"          fecha = Fecha,",
+				"          codInventario = CodInventario,",
+				"          descripcion = Descripcion,",
+				"          pais = Pais,",
+				"          idCliente = IdCliente",
+				"     )) ~> sink1"
 			]
 		}
 	}
