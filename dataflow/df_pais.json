@@ -1,0 +1,35 @@
+{
+	"name": "df_pais",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ventas_csv",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          NoFactura as string,",
+				"          CodInventario as string,",
+				"          Descripcion as string,",
+				"          Cantidad as string,",
+				"          Fecha as string,",
+				"          PrecioUnitario as string,",
+				"          Total as string,",
+				"          IdCliente as string,",
+				"          Pais as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1"
+			]
+		}
+	}
+}
